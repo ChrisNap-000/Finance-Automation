@@ -29,7 +29,7 @@ def check_password():
     )
 
     if st.sidebar.button("Login"):
-        if password == st.secrets["STREAMLIT_APP_PASSWORD"]
+        if password == st.secrets["STREAMLIT_APP_PASSWORD"]:
             st.session_state.authenticated = True
             #st.experimental_rerun()
         else:
