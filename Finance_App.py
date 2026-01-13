@@ -390,6 +390,9 @@ st.plotly_chart(fig_cashflow, use_container_width=True)
 # ---------------------------
 # PNL BREAKDOWN
 # ---------------------------
+# Title
+st.subheader("PNL Breakdown")
+
 # Create copy of filtered df for pivoting
 pivoted_source = filtered_df[filtered_df["PnL_flag"] == True].copy()
 # Create a Month-Year column as period for sorting, and a string for display
