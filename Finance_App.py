@@ -81,6 +81,19 @@ df_main = pd.read_csv(
 # Convert bad rows into DataFrame
 df_bad = pd.DataFrame(bad_rows)
 
+# Rename columns in bad rows dataframe and referenced later
+columns = {
+    0:"Date",
+    1:"Bank RTN",
+    2:"Account Number",
+    3:"Transaction Type",
+    4:"Description",
+    6:"Debit",
+    7:"Credit",
+    8:"Check Number",
+    9:"Account Running Balance"
+}
+
 # Handle bad rows if any
 if not df_bad.empty:
     # If Description was split due to a comma, combine
@@ -88,18 +101,6 @@ if not df_bad.empty:
         df_bad[4] = df_bad[4].astype(str) + "," + df_bad[5].astype(str)
         df_bad = df_bad.drop(columns=[5])
 
-    # Rename columns in bad rows dataframe
-    columns = {
-        0:"Date",
-        1:"Bank RTN",
-        2:"Account Number",
-        3:"Transaction Type",
-        4:"Description",
-        6:"Debit",
-        7:"Credit",
-        8:"Check Number",
-        9:"Account Running Balance"
-    }
     # Rename the columns
     df_bad = df_bad.rename(columns=columns)
 
