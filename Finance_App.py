@@ -427,15 +427,21 @@ pivoted_df = pivoted_df.reindex(columns=cols)
 # Display breakdown by Account and Transaction Type
 for account in pivoted_df.index.get_level_values(0).unique():
     account_df = pivoted_df.xs(account, level=0, drop_level=False)
+
     with st.expander(f"Account: {account}", expanded=True):
         for txn_type in account_df.index.get_level_values(1).unique():
             txn_df = account_df.xs(txn_type, level=1, drop_level=False)
-            # Subtotal for this transaction type
+
             subtotal = txn_df.sum(numeric_only=True).to_frame().T
             st.markdown(f"**Transaction Type: {txn_type} (Subtotal)**")
             st.dataframe(subtotal.style.format("${:,.2f}"))
-            # Details for each description
-            with st.expander(f"Show Details for {txn_type}"):
+
+            show_details = st.checkbox(
+                f"Show details for {txn_type}",
+                key=f"{account}_{txn_type}_details"
+            )
+
+            if show_details:
                 detail_df = txn_df.droplevel([0, 1])
                 st.dataframe(detail_df.style.format("${:,.2f}"))
 
