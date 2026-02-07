@@ -353,6 +353,8 @@ row3_col3.metric("CD Balance", f"${cdBalance:,.2f}")
 # ---------------------------
 # MONTHLY CASH FLOW
 # ---------------------------
+st.write(filtered_df.dtypes)
+st.write(filtered_df[["Amount"]].head(10))
 
 # Title
 st.subheader("Monthly Net Cash Flow")
