@@ -369,7 +369,6 @@ def monthly_net(group):
     income1 = group.loc[group["Transaction Type"].isin(["Interest", "Income"]), "Amount"].sum()
     spending = group.loc[group["Transaction Type"].isin(["Expense"]), "Amount"].sum()
     return income1 + spending
-st.write(monthly_net)
 
 # Group by Month and calculate net cash flow
 monthly = (
@@ -378,7 +377,7 @@ monthly = (
     .apply(monthly_net)
     .reset_index(name='Net Cash Flow')
 )
-
+st.write(monthly)
 # Convert to string for nicer x-axis labels
 monthly["MonthStr"] = monthly["Month"].dt.strftime("%b %Y")  # e.g., "Jan 2026"
 
