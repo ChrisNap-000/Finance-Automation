@@ -358,7 +358,11 @@ row3_col3.metric("CD Balance", f"${cdBalance:,.2f}")
 st.subheader("Monthly Net Cash Flow")
 
 # Create a Month column as datetime (first day of the month)
-filtered_df["Month"] = filtered_df["Date"].dt.to_period("M").dt.to_timestamp()
+#filtered_df["Month"] = filtered_df["Date"].dt.to_period("M").dt.to_timestamp()
+filtered_df["Date"] = pd.to_datetime(filtered_df["Date"], errors="coerce")
+
+filtered_df["Month"] = filtered_df["Date"].dt.to_period("M")
+filtered_df["Month"] = filtered_df["Month"].dt.to_timestamp()
 
 # Define a function to compute net for a group
 def monthly_net(group):
