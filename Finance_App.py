@@ -353,8 +353,6 @@ row3_col3.metric("CD Balance", f"${cdBalance:,.2f}")
 # ---------------------------
 # MONTHLY CASH FLOW
 # ---------------------------
-st.write(filtered_df.dtypes)
-st.write(filtered_df[["Amount"]].head(10))
 
 # Title
 st.subheader("Monthly Net Cash Flow")
@@ -371,6 +369,7 @@ def monthly_net(group):
     income1 = group.loc[group["Transaction Type"].isin(["Interest", "Income"]), "Amount"].sum()
     spending = group.loc[group["Transaction Type"].isin(["Expense"]), "Amount"].sum()
     return income1 + spending
+st.write(monthly_net)
 
 # Group by Month and calculate net cash flow
 monthly = (
@@ -395,7 +394,6 @@ fig_cashflow = px.bar(
 
 # Update x-axis to show MonthStr
 st.plotly_chart(fig_cashflow, use_container_width=True)
-
 # ---------------------------
 # PNL BREAKDOWN
 # ---------------------------
