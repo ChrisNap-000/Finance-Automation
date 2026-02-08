@@ -361,9 +361,20 @@ st.subheader("Monthly Net Cash Flow")
 # Create a Month column as datetime (first day of the month)
 #filtered_df["Month"] = filtered_df["Date"].dt.to_period("M").dt.to_timestamp()
 filtered_df["Date"] = pd.to_datetime(filtered_df["Date"], errors="coerce")
-
 filtered_df["Month"] = filtered_df["Date"].dt.to_period("M")
 filtered_df["Month"] = filtered_df["Month"].dt.to_timestamp()
+
+# Create paycheck count by month for data label
+paycheck_counts = (
+    filtered_df
+    .loc[filtered_df["Description"] == "LevelUP Payroll"]
+    .groupby("Month")
+    .size()
+    .reset_index(name="Paycheck Count")
+)
+
+# Divide paycheck counts by 2 because paycheck goes to checkings and savings
+paycheck_counts["Paycheck Count"] = paycheck_counts["Paycheck Count"] / 2
 
 # Define a function to compute net for a group
 def monthly_net(group):
@@ -378,29 +389,52 @@ monthly = (
     .apply(monthly_net)
     .reset_index(name='Net Cash Flow')
 )
-# monthly["Net Cash Flow"] = pd.to_numeric(
-#     monthly["Net Cash Flow"],
-#     errors="coerce"
-# )
-st.write(monthly)
 
-st.write(monthly.dtypes)
 # Convert to string for nicer x-axis labels
 monthly["MonthStr"] = monthly["Month"].dt.strftime("%b %Y")  # e.g., "Jan 2026"
 
+# Join the paycheck counts to the monthly dataframe
+monthly = monthly.merge(
+    paycheck_counts,
+    on="Month",
+    how="left"
+)
+
 # Sort chronologically
 monthly = monthly.sort_values("Month")
+
+# Create plotly bar chart with custom hover template
 
 fig_cashflow = go.Figure(
     data=[
         go.Bar(
             x=monthly["MonthStr"].tolist(),
-            y=monthly["Net Cash Flow"].astype(float).tolist(),
-            hovertemplate="<b>%{x}</b><br>Net Cash Flow: $%{y:,.2f}<extra></extra>",
+            y=monthly["Net Cash Flow"].tolist(),
+            text=monthly["Paycheck Count"].astype(str).tolist(),
+            textposition="outside",
+            hovertemplate=(
+                "<b>%{x}</b><br>"
+                "Net Cash Flow: $%{y:,.2f}<br>"
+                "Paychecks: %{text}"
+                "<extra></extra>"
+            ),
         )
     ]
 )
 
+# fig_cashflow = go.Figure(
+#     data=[
+#         go.Bar(
+#             x=monthly["MonthStr"].tolist(),
+#             y=monthly["Net Cash Flow"].astype(float).tolist(),
+#             hovertemplate="<b>%{x}</b><br>Net Cash Flow: $%{y:,.2f}<extra></extra>"
+#             # "Paychecks: %{text}"
+#             # "<extra></extra>"
+#         )
+#     ]
+# )
+
+# Update layout with axis titles and currency formatting
 fig_cashflow.update_layout(
     xaxis_title="Month",
     yaxis_title="Net Cash Flow",
@@ -408,27 +442,9 @@ fig_cashflow.update_layout(
     yaxis_tickformat=",.0f"
 )
 
+# Display the chart
 st.plotly_chart(fig_cashflow, use_container_width=True)
 
-# # Create bar chart using Plotly
-# fig_cashflow = px.bar(
-#     x=monthly["MonthStr"],
-#     y=monthly["Net Cash Flow"].astype(float).tolist()
-# )
-
-# fig_cashflow.update_xaxes(title='Month')
-
-# fig_cashflow.update_traces(
-#     hovertemplate="<b>%{x}</b><br>Net Cash Flow: $%{y:,.2f}<extra></extra>"
-# )
-
-# fig_cashflow.update_yaxes(
-#     tickprefix="$",
-#     tickformat=",.0f"
-# )
-
-# Update x-axis to show MonthStr
-# st.plotly_chart(fig_cashflow, use_container_width=True)
 # ---------------------------
 # PNL BREAKDOWN
 # ---------------------------
