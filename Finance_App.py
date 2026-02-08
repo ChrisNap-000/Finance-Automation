@@ -387,9 +387,11 @@ monthly = monthly.sort_values("Month")
 # Create bar chart using Plotly
 fig_cashflow = px.bar(
     monthly,
-    x="Month",
+    x="MonthStr",
     y="Net Cash Flow"
 )
+
+fig_cashflow.update_xaxes(title='Month')
 
 # Update x-axis to show MonthStr
 st.plotly_chart(fig_cashflow, use_container_width=True)
