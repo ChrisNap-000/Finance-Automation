@@ -381,6 +381,7 @@ monthly["Net Cash Flow"] = pd.to_numeric(
     monthly["Net Cash Flow"],
     errors="coerce"
 )
+st.write(monthly)
 
 st.write(monthly.dtypes)
 # Convert to string for nicer x-axis labels
