@@ -422,18 +422,6 @@ fig_cashflow = go.Figure(
     ]
 )
 
-# fig_cashflow = go.Figure(
-#     data=[
-#         go.Bar(
-#             x=monthly["MonthStr"].tolist(),
-#             y=monthly["Net Cash Flow"].astype(float).tolist(),
-#             hovertemplate="<b>%{x}</b><br>Net Cash Flow: $%{y:,.2f}<extra></extra>"
-#             # "Paychecks: %{text}"
-#             # "<extra></extra>"
-#         )
-#     ]
-# )
-
 # Update layout with axis titles and currency formatting
 fig_cashflow.update_layout(
     xaxis_title="Month",
@@ -526,7 +514,7 @@ st.dataframe(
     display_df.sort_values("Date", ascending=False).reset_index(drop=True).style.format({
         "Amount": "${:,.2f}",
         "Account Running Balance": "${:,.2f}"
-    })
+    }), use_container_width=True
 )
 
 # ---------------------------
@@ -536,4 +524,4 @@ st.dataframe(
 st.subheader("PNL Breakdown Download")
 
 # Display full pivoted dataframe with formatting
-st.dataframe(pivoted_df.style.format("${:,.2f}"))
+st.dataframe(pivoted_df.style.format("${:,.2f}"), use_container_width=True)
