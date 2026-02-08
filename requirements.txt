@@ -1,6 +1,7 @@
 numpy
 pandas
 plotly.express
+plotly.graph_objects
 streamlit==1.29.0
 openpyxl
 altair==4.2.2

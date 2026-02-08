@@ -6,6 +6,7 @@ import numpy as np
 import os
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 import streamlit as st
 
 # Set the page
@@ -377,10 +378,10 @@ monthly = (
     .apply(monthly_net)
     .reset_index(name='Net Cash Flow')
 )
-monthly["Net Cash Flow"] = pd.to_numeric(
-    monthly["Net Cash Flow"],
-    errors="coerce"
-)
+# monthly["Net Cash Flow"] = pd.to_numeric(
+#     monthly["Net Cash Flow"],
+#     errors="coerce"
+# )
 st.write(monthly)
 
 st.write(monthly.dtypes)
@@ -390,25 +391,44 @@ monthly["MonthStr"] = monthly["Month"].dt.strftime("%b %Y")  # e.g., "Jan 2026"
 # Sort chronologically
 monthly = monthly.sort_values("Month")
 
-# Create bar chart using Plotly
-fig_cashflow = px.bar(
-    x=monthly["MonthStr"],
-    y=monthly["Net Cash Flow"].astype(float).tolist()
+fig_cashflow = go.Figure(
+    data=[
+        go.Bar(
+            x=monthly["MonthStr"].tolist(),
+            y=monthly["Net Cash Flow"].astype(float).tolist(),
+            hovertemplate="<b>%{x}</b><br>Net Cash Flow: $%{y:,.2f}<extra></extra>",
+        )
+    ]
 )
 
-fig_cashflow.update_xaxes(title='Month')
-
-fig_cashflow.update_traces(
-    hovertemplate="<b>%{x}</b><br>Net Cash Flow: $%{y:,.2f}<extra></extra>"
+fig_cashflow.update_layout(
+    xaxis_title="Month",
+    yaxis_title="Net Cash Flow",
+    yaxis_tickprefix="$",
+    yaxis_tickformat=",.0f"
 )
 
-fig_cashflow.update_yaxes(
-    tickprefix="$",
-    tickformat=",.0f"
-)
+st.plotly_chart(fig_cashflow, use_container_width=True)
+
+# # Create bar chart using Plotly
+# fig_cashflow = px.bar(
+#     x=monthly["MonthStr"],
+#     y=monthly["Net Cash Flow"].astype(float).tolist()
+# )
+
+# fig_cashflow.update_xaxes(title='Month')
+
+# fig_cashflow.update_traces(
+#     hovertemplate="<b>%{x}</b><br>Net Cash Flow: $%{y:,.2f}<extra></extra>"
+# )
+
+# fig_cashflow.update_yaxes(
+#     tickprefix="$",
+#     tickformat=",.0f"
+# )
 
 # Update x-axis to show MonthStr
-st.plotly_chart(fig_cashflow, use_container_width=True)
+# st.plotly_chart(fig_cashflow, use_container_width=True)
 # ---------------------------
 # PNL BREAKDOWN
 # ---------------------------
