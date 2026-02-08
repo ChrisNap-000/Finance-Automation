@@ -377,7 +377,12 @@ monthly = (
     .apply(monthly_net)
     .reset_index(name='Net Cash Flow')
 )
-st.write(monthly)
+monthly["Net Cash Flow"] = pd.to_numeric(
+    monthly["Net Cash Flow"],
+    errors="coerce"
+)
+
+st.write(monthly.dtypes)
 # Convert to string for nicer x-axis labels
 monthly["MonthStr"] = monthly["Month"].dt.strftime("%b %Y")  # e.g., "Jan 2026"
 
@@ -392,6 +397,15 @@ fig_cashflow = px.bar(
 )
 
 fig_cashflow.update_xaxes(title='Month')
+
+fig_cashflow.update_traces(
+    hovertemplate="<b>%{x}</b><br>Net Cash Flow: $%{y:,.2f}<extra></extra>"
+)
+
+fig_cashflow.update_yaxes(
+    tickprefix="$",
+    tickformat=",.0f"
+)
 
 # Update x-axis to show MonthStr
 st.plotly_chart(fig_cashflow, use_container_width=True)
