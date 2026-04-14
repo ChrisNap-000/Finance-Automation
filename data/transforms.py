@@ -3,6 +3,8 @@ import calendar
 import numpy as np
 import pandas as pd
 
+import streamlit as st
+
 from config import BAD_ROW_COLUMNS, DATA_TYPES, DESC_PATTERNS, TRANS_TYPE_PATTERNS
 
 
@@ -77,6 +79,6 @@ def _apply_pnl_flag(df):
 
     df.loc[
         (df["Transaction Type"].str.upper() == "TRANSFER") &
-        (df["Description"].str.upper() == "ONLINE XFER TRANSFER TO CC X2491"),
+        (df["Description"].str.upper() == st.secrets["CC_SECRET"]),
         "PnL_flag"
     ] = False
