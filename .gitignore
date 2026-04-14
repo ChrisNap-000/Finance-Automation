@@ -16,3 +16,11 @@ env/
 # Ignore system files
 .DS_Store
 Thumbs.db
+
+secrets.toml
+
+markdown
+
+TEST.ipynb
+
+.env
