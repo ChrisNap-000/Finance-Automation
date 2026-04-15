@@ -1,6 +1,6 @@
 import streamlit as st
 
-from auth import check_password
+from auth import check_auth, render_logout
 from data.loader import load_transactions, load_lookup, merge_data
 from data.transforms import clean_data, apply_transformations
 from ui.filters import render_filters
@@ -16,8 +16,10 @@ st.set_page_config(page_title="Personal Finance Dashboard", layout="wide")
 # ---------------------------
 # AUTH
 # ---------------------------
-if not check_password():
+if not check_auth():
     st.stop()
+
+render_logout()
 
 # ---------------------------
 # FILE UPLOAD
