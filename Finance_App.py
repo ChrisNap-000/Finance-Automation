@@ -1,17 +1,108 @@
 import streamlit as st
 
-from auth import check_auth, render_logout
-from data.loader import load_transactions, load_lookup, merge_data
-from data.transforms import clean_data, apply_transformations
+from auth import check_auth
+from data.loader import load_transactions, load_account_balances, load_account_names
+from data.transforms import apply_transformations
 from ui.filters import render_filters
 from ui.kpis import render_kpis
 from ui.charts import render_monthly_cashflow
 from ui.tables import render_pnl_breakdown, render_transactions_table, render_pnl_download
+from ui.add_transaction import render_add_transaction
 
 # ---------------------------
 # PAGE CONFIG
 # ---------------------------
-st.set_page_config(page_title="Personal Finance Dashboard", layout="wide")
+st.set_page_config(page_title="Finance Dashboard", page_icon="💲", layout="wide")
+
+# ---------------------------
+# GLOBAL STYLES
+# ---------------------------
+st.markdown("""
+<style>
+    /* Hide Streamlit chrome */
+    #MainMenu      { visibility: hidden; }
+    footer         { visibility: hidden; }
+    header         { visibility: hidden; }
+
+    /* Tighten top padding */
+    .main .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+
+    /* Title block */
+    .title-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-bottom: 0.3rem;
+    }
+    .app-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 3.2rem;
+        height: 3.2rem;
+        border-radius: 50%;
+        background-color: #58A6FF;
+        color: #0D1117;
+        font-size: 1.7rem;
+        font-weight: 800;
+        flex-shrink: 0;
+    }
+    .app-title {
+        font-size: 3rem;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        color: #C9D1D9;
+        margin: 0;
+        line-height: 1;
+    }
+    .app-subtitle {
+        text-align: center;
+        font-size: 0.8rem;
+        color: #6E7681;
+        margin-bottom: 1.75rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+
+    /* Nav buttons */
+    div[data-testid="column"] > div > div > div > div > button {
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        letter-spacing: 0.05em;
+        padding: 0.45rem 0;
+        width: 100%;
+        transition: opacity 0.15s;
+    }
+
+    /* Sidebar — clean up */
+    section[data-testid="stSidebar"] {
+        background-color: #0D1117;
+        border-right: 1px solid #21262D;
+    }
+    section[data-testid="stSidebar"] .block-container {
+        padding-top: 1.5rem;
+    }
+
+    /* Metric cards */
+    div[data-testid="metric-container"] {
+        background-color: #161B22;
+        border: 1px solid #21262D;
+        border-radius: 10px;
+        padding: 1rem 1.2rem;
+    }
+
+    /* Divider */
+    hr {
+        border-color: #21262D;
+        margin: 0.75rem 0 1.25rem 0;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 # ---------------------------
 # AUTH
@@ -19,27 +110,61 @@ st.set_page_config(page_title="Personal Finance Dashboard", layout="wide")
 if not check_auth():
     st.stop()
 
-render_logout()
+# ---------------------------
+# LOAD DATA
+# ---------------------------
+access_token  = st.session_state.get("access_token", "")
+account_names = load_account_names(access_token)
 
 # ---------------------------
-# FILE UPLOAD
+# TITLE
 # ---------------------------
-st.sidebar.header("Upload Data Files")
-transactions_file = st.sidebar.file_uploader("Upload Transactions CSV", type=["csv"])
-lookup_file = st.sidebar.file_uploader("Upload Account Lookup XLSX", type=["xlsx"])
+st.markdown("""
+<div class="title-container">
+    <div class="app-logo">$</div>
+    <p class="app-title">Finance Dashboard</p>
+</div>
+<p class="app-subtitle">Personal Financial Overview</p>
+""", unsafe_allow_html=True)
 
-if not transactions_file or not lookup_file:
-    st.info("Please upload both CSV files to continue.")
+# ---------------------------
+# CENTERED NAV BUTTONS
+# ---------------------------
+if "page" not in st.session_state:
+    st.session_state["page"] = "Dashboard"
+
+_, col1, col2, _ = st.columns([2, 1, 1, 2])
+
+if col1.button("Dashboard", use_container_width=True,
+               type="primary" if st.session_state["page"] == "Dashboard" else "secondary"):
+    st.session_state["page"] = "Dashboard"
+    st.rerun()
+
+if col2.button("Add Transaction", use_container_width=True,
+               type="primary" if st.session_state["page"] == "Add Transaction" else "secondary"):
+    st.session_state["page"] = "Add Transaction"
+    st.rerun()
+
+st.divider()
+
+# ---------------------------
+# PAGE ROUTING
+# ---------------------------
+if st.session_state["page"] == "Add Transaction":
+    render_add_transaction(account_names)
     st.stop()
 
 # ---------------------------
-# LOAD & TRANSFORM DATA
+# DASHBOARD — LOAD & TRANSFORM
 # ---------------------------
-df_main = load_transactions(transactions_file)
-df_lookup = load_lookup(lookup_file)
-df_merged = merge_data(df_main, df_lookup)
-df_clean = clean_data(df_merged)
-df = apply_transformations(df_clean)
+df_raw           = load_transactions(access_token)
+account_balances = load_account_balances(access_token)
+
+if df_raw.empty:
+    st.info("No transactions found in the database.")
+    st.stop()
+
+df = apply_transformations(df_raw)
 
 # ---------------------------
 # SIDEBAR FILTERS
@@ -54,9 +179,9 @@ filtered_df = df[
 ]
 
 # ---------------------------
-# RENDER UI
+# RENDER DASHBOARD
 # ---------------------------
-render_kpis(df, filtered_df)
+render_kpis(filtered_df, account_balances)
 render_monthly_cashflow(filtered_df)
 pivoted_df = render_pnl_breakdown(filtered_df)
 render_transactions_table(filtered_df)

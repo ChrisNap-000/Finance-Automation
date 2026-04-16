@@ -11,7 +11,7 @@ def render_monthly_cashflow(filtered_df):
     df["Month"] = df["Date"].dt.to_period("M").dt.to_timestamp()
 
     paycheck_counts = (
-        df.loc[df["Description"] == "LevelUP Payroll"]
+        df.loc[df["Vendor"].str.contains("LEVELUP", case=False, na=False)]
         .groupby("Month")
         .size()
         .reset_index(name="Paycheck Count")

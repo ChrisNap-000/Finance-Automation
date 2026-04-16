@@ -29,76 +29,75 @@ def _inject_fragment_redirect() -> None:
     )
 
 
-def _handle_password_reset() -> None:
-    """Show a set-new-password form when arriving via a Supabase recovery link."""
-    access_token = st.query_params.get("access_token")
+def _render_password_reset_page() -> None:
+    """Full-page set-new-password form shown when arriving via a Supabase recovery link."""
+    access_token  = st.query_params.get("access_token")
     refresh_token = st.query_params.get("refresh_token", "")
 
-    st.sidebar.header("🔑 Set New Password")
-    new_password = st.sidebar.text_input("New password", type="password", key="new_pw")
-    confirm_password = st.sidebar.text_input("Confirm password", type="password", key="confirm_pw")
+    _, col, _ = st.columns([1, 1.5, 1])
+    with col:
+        st.title("Set New Password")
+        new_password     = st.text_input("New password",     type="password", key="new_pw")
+        confirm_password = st.text_input("Confirm password", type="password", key="confirm_pw")
 
-    if st.sidebar.button("Update password", key="update_pw_btn"):
-        if new_password != confirm_password:
-            st.sidebar.error("Passwords do not match.")
-            return
-        if len(new_password) < 8:
-            st.sidebar.error("Password must be at least 8 characters.")
-            return
-        try:
-            client = _get_client()
-            client.auth.set_session(access_token, refresh_token)
-            client.auth.update_user({"password": new_password})
-            st.query_params.clear()
-            st.sidebar.success("Password updated. Please log in.")
-            st.rerun()
-        except Exception as e:
-            st.sidebar.error(f"Could not update password: {e}")
+        if st.button("Update password", use_container_width=True):
+            if new_password != confirm_password:
+                st.error("Passwords do not match.")
+                return
+            if len(new_password) < 8:
+                st.error("Password must be at least 8 characters.")
+                return
+            try:
+                client = _get_client()
+                client.auth.set_session(access_token, refresh_token)
+                client.auth.update_user({"password": new_password})
+                st.query_params.clear()
+                st.success("Password updated. You can now log in.")
+                st.rerun()
+            except Exception as e:
+                st.error(f"Could not update password: {e}")
+
+
+def _render_login_page() -> None:
+    """Centered landing page login form."""
+    _, col, _ = st.columns([1, 1.5, 1])
+    with col:
+        st.title("Personal Finance Dashboard")
+        st.divider()
+
+        email    = st.text_input("Email",    key="login_email")
+        password = st.text_input("Password", type="password", key="login_password")
+
+        if st.button("Login", use_container_width=True, type="primary"):
+            if not email or not password:
+                st.error("Please enter your email and password.")
+                return
+            try:
+                client = _get_client()
+                res    = client.auth.sign_in_with_password({"email": email, "password": password})
+                st.session_state["authenticated"]  = True
+                st.session_state["user_email"]     = res.user.email
+                st.session_state["user_id"]        = res.user.id
+                st.session_state["access_token"]   = res.session.access_token
+                st.session_state["refresh_token"]  = res.session.refresh_token
+                st.rerun()
+            except Exception:
+                st.error("Invalid email or password.")
 
 
 def check_auth() -> bool:
-    """Return True if the user is authenticated, otherwise render the appropriate form and return False."""
-    # Convert any Supabase recovery fragment to query params on first load
+    """
+    Return True if the user is authenticated.
+    Otherwise render the login or password-reset page and return False.
+    """
     _inject_fragment_redirect()
 
-    # Handle password reset flow
     if st.query_params.get("type") == "recovery":
-        _handle_password_reset()
+        _render_password_reset_page()
         return False
 
     if st.session_state.get("authenticated"):
         return True
 
-    st.sidebar.header("🔒 Login")
-
-    email = st.sidebar.text_input("Email", key="login_email")
-    password = st.sidebar.text_input("Password", type="password", key="login_password")
-
-    if st.sidebar.button("Login", key="login_btn"):
-        if not email or not password:
-            st.sidebar.error("Please enter your email and password.")
-            return False
-        try:
-            client = _get_client()
-            res = client.auth.sign_in_with_password({"email": email, "password": password})
-            st.session_state["authenticated"] = True
-            st.session_state["user_email"] = res.user.email
-            st.rerun()
-        except Exception:
-            st.sidebar.error("Invalid email or password.")
-
+    _render_login_page()
     return False
-
-
-def render_logout() -> None:
-    """Render a logout button in the sidebar."""
-    email = st.session_state.get("user_email", "")
-    if email:
-        st.sidebar.caption(f"Signed in as {email}")
-    if st.sidebar.button("Logout", key="logout_btn"):
-        try:
-            _get_client().auth.sign_out()
-        except Exception:
-            pass
-        st.session_state.clear()
-        st.rerun()

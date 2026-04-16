@@ -6,7 +6,7 @@ def render_pnl_breakdown(filtered_df):
 
     source = filtered_df[filtered_df["PnL_flag"] == True].copy()
     source["Month-Year-Period"] = source["Date"].dt.to_period("M")
-    source["Month-Year"] = source["Month-Year-Period"].dt.strftime("%b-%Y")
+    source["Month-Year"]        = source["Month-Year-Period"].dt.strftime("%b-%Y")
     source = source.sort_values("Month-Year-Period")
 
     month_year_order = (
@@ -16,7 +16,7 @@ def render_pnl_breakdown(filtered_df):
     )
 
     pivoted_df = source.pivot_table(
-        index=["Account Name", "Transaction Type", "Description"],
+        index=["Account", "Transaction Type", "Vendor"],
         columns="Month-Year",
         values="Amount",
         aggfunc="sum",
@@ -56,8 +56,8 @@ def render_transactions_table(filtered_df):
     st.subheader("Transactions")
 
     display_df = filtered_df[[
-        "Date", "Account Name", "Transaction Type", "Description",
-        "Check Number", "Amount", "Account Running Balance", "PnL_flag"
+        "Date", "Account", "Transaction Type", "Vendor",
+        "Category", "Check Number", "Amount", "Notes", "PnL_flag"
     ]].copy()
 
     display_df["Date"] = display_df["Date"].dt.strftime("%m-%d-%Y")
@@ -65,10 +65,7 @@ def render_transactions_table(filtered_df):
     st.dataframe(
         display_df.sort_values("Date", ascending=False)
         .reset_index(drop=True)
-        .style.format({
-            "Amount": "${:,.2f}",
-            "Account Running Balance": "${:,.2f}"
-        }),
+        .style.format({"Amount": "${:,.2f}"}),
         use_container_width=True
     )
 
