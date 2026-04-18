@@ -1,17 +1,44 @@
+# =============================================================================
+# auth.py — Authentication helpers
+#
+# Handles all Supabase auth flows:
+#   - Standard email/password login
+#   - Password reset via Supabase recovery link
+#
+# How it works:
+#   1. check_auth() is called at the top of Finance_App.py on every page load.
+#   2. If the user is not logged in, it renders the login form and returns False,
+#      which causes Finance_App.py to call st.stop() and halt further rendering.
+#   3. On successful login, user info and tokens are stored in st.session_state
+#      so they persist for the duration of the browser session.
+#
+# Password reset flow:
+#   Supabase sends a recovery email with a link like:
+#     https://yourapp.com/#access_token=...&type=recovery
+#   Streamlit cannot read URL fragments (#...), so a JavaScript snippet rewrites
+#   the fragment as query params (?access_token=...&type=recovery) before
+#   Streamlit processes them.
+# =============================================================================
+
 import streamlit as st
 import streamlit.components.v1 as components
 from supabase import create_client, Client
 
 
 def _get_client() -> Client:
+    """Create an unauthenticated Supabase client using credentials from st.secrets."""
     return create_client(st.secrets["url"], st.secrets["key"])
 
 
 def _inject_fragment_redirect() -> None:
     """
-    Streamlit cannot read URL fragments (#...). This script runs in the browser,
-    detects a Supabase recovery fragment, and rewrites it as query params so
-    Streamlit can read them via st.query_params.
+    Inject a browser-side JavaScript snippet that converts Supabase recovery
+    URL fragments into query params so Streamlit can read them.
+
+    Why this is needed: Streamlit's st.query_params only reads the query string
+    (?key=value), not the URL fragment (#key=value). Supabase recovery links
+    use fragments. This script detects a recovery fragment and rewrites the URL.
+    It runs silently with height=0 so no visible element appears.
     """
     components.html(
         """
@@ -30,7 +57,17 @@ def _inject_fragment_redirect() -> None:
 
 
 def _render_password_reset_page() -> None:
-    """Full-page set-new-password form shown when arriving via a Supabase recovery link."""
+    """
+    Full-page set-new-password form shown when the user arrives via a
+    Supabase recovery link.
+
+    The access_token from the URL is used to authenticate the password update
+    request. After a successful update, query params are cleared and the user
+    is redirected to the login page.
+
+    Debug tip: If this page shows but the update fails, check that the
+    access_token in the URL has not expired (Supabase tokens expire after 1 hour).
+    """
     access_token  = st.query_params.get("access_token")
     refresh_token = st.query_params.get("refresh_token", "")
 
@@ -49,6 +86,7 @@ def _render_password_reset_page() -> None:
                 return
             try:
                 client = _get_client()
+                # Set the recovery session before updating — required by Supabase
                 client.auth.set_session(access_token, refresh_token)
                 client.auth.update_user({"password": new_password})
                 st.query_params.clear()
@@ -59,7 +97,19 @@ def _render_password_reset_page() -> None:
 
 
 def _render_login_page() -> None:
-    """Centered landing page login form."""
+    """
+    Centered email/password login form.
+
+    On successful login, the following keys are written to st.session_state:
+      - authenticated (bool)   : used by check_auth() to skip the login page
+      - user_email (str)       : the logged-in user's email
+      - user_id (str)          : Supabase UUID for the user (used as FK in DB inserts)
+      - access_token (str)     : JWT used to authenticate Supabase queries (RLS)
+      - refresh_token (str)    : used to renew the session when the JWT expires
+
+    Debug tip: If login always fails, verify the Supabase URL and anon key in
+    .streamlit/secrets.toml match the project settings.
+    """
     _, col, _ = st.columns([1, 1.5, 1])
     with col:
         st.title("Personal Finance Dashboard")
@@ -82,13 +132,23 @@ def _render_login_page() -> None:
                 st.session_state["refresh_token"]  = res.session.refresh_token
                 st.rerun()
             except Exception:
+                # Generic message intentional — don't reveal whether email exists
                 st.error("Invalid email or password.")
 
 
 def check_auth() -> bool:
     """
-    Return True if the user is authenticated.
-    Otherwise render the login or password-reset page and return False.
+    Return True if the user is authenticated; otherwise render the appropriate
+    auth page (login or password reset) and return False.
+
+    This is called once at the top of Finance_App.py. If it returns False,
+    Finance_App.py calls st.stop() to halt all further rendering.
+
+    Flow:
+      1. Inject the fragment-to-query-param redirect script (always safe to run)
+      2. If type=recovery is in query params → show password reset page
+      3. If session_state["authenticated"] is True → user is logged in
+      4. Otherwise → show login page
     """
     _inject_fragment_redirect()
 
