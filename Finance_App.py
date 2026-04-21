@@ -200,7 +200,12 @@ df_raw           = load_transactions(access_token)
 account_balances = load_account_balances(access_token)
 
 if df_raw.empty:
-    st.info("No transactions found in the database.")
+    st.markdown(
+        '<div style="background-color:rgba(23,146,60,0.09);border-left:4px solid #17923c;'
+        'border-radius:4px;padding:0.75rem 1rem;color:#17923c;font-size:0.95rem;">'
+        "No transactions found in the database.</div>",
+        unsafe_allow_html=True,
+    )
     st.stop()
 
 # Apply derived columns: Year, Month, PnL_flag
