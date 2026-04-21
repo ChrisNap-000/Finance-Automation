@@ -80,6 +80,7 @@ def _render_form(account_names: dict) -> None:
             "balance":       balance,
             "recorded_date": recorded_date.isoformat(),
             "notes":         notes or None,
+            "user_id":       st.session_state.get("user_id"),
         }
         st.session_state["add_bal_step"] = "confirm"
         st.rerun()

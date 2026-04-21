@@ -11,6 +11,8 @@ import calendar
 
 import streamlit as st
 
+from config import INVESTMENT_ACCOUNTS
+
 
 def apply_transformations(df):
     """
@@ -64,9 +66,9 @@ def _apply_pnl_flag(df):
     # Start with all transactions included in PnL
     df["PnL_flag"] = True
 
-    # Credit card payments received should not count as income
+    # Credit card payments received into TD Cash should not count as income
     df.loc[
-        (df["Account"] == "Credit Card") & (df["Amount"] > 0),
+        (df["Account"] == "TD Cash") & (df["Amount"] > 0),
         "PnL_flag"
     ] = False
 
@@ -76,3 +78,6 @@ def _apply_pnl_flag(df):
         (df["Vendor"].str.upper() == st.secrets["CC_SECRET"].upper()),
         "PnL_flag"
     ] = False
+
+    # Investment account transactions are not income/spending — exclude from PnL
+    df.loc[df["Account"].isin(INVESTMENT_ACCOUNTS), "PnL_flag"] = False

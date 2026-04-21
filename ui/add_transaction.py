@@ -26,6 +26,7 @@ from datetime import date
 
 import streamlit as st
 
+from config import ACCOUNT_DROPDOWN_ORDER
 from data.loader import insert_transaction, load_transactions
 
 TRANSACTION_TYPES = [
@@ -97,7 +98,11 @@ def _render_form(account_names: dict) -> None:
 
         with col1:
             txn_date = st.date_input("Transaction Date", value=date.today())
-            account  = st.selectbox("Account", options=list(account_names.keys()))
+            ordered_accounts = sorted(
+                account_names.keys(),
+                key=lambda x: ACCOUNT_DROPDOWN_ORDER.index(x) if x in ACCOUNT_DROPDOWN_ORDER else len(ACCOUNT_DROPDOWN_ORDER)
+            )
+            account  = st.selectbox("Account", options=ordered_accounts)
             txn_type = st.selectbox("Transaction Type", options=TRANSACTION_TYPES)
             vendor   = st.text_input("Vendor Name")
 

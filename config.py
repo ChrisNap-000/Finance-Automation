@@ -5,7 +5,16 @@
 # modules without duplication.
 # =============================================================================
 
-# Accounts included in the "Total Balance" KPI and individual balance metrics.
-# These must match the account_name values stored in the dim_accounts table.
-# If you add or rename an account in Supabase, update this list to match.
-BALANCE_ACCOUNTS = ["Checking", "Savings", "CD"]
+# All accounts included in the "Total Balance" KPI.
+# Must match account_name values in dim_accounts exactly (case-sensitive).
+BALANCE_ACCOUNTS = ["TD Checking", "TD Savings", "TD CD", "TD Cash", "Schwab", "Vanguard", "Retirement"]
+
+# Bank/cash accounts shown in their own balance row on the dashboard.
+BANK_ACCOUNTS = ["TD Checking", "TD Savings", "TD CD", "TD Cash"]
+
+# Investment accounts shown separately — excluded from PnL calculations.
+INVESTMENT_ACCOUNTS = ["Schwab", "Vanguard", "Retirement"]
+
+# Preferred display order for the account dropdown in Add Transaction.
+# Any account not listed here will appear at the end in alphabetical order.
+ACCOUNT_DROPDOWN_ORDER = ["TD Cash", "TD Checking", "TD Savings", "TD CD", "Retirement", "Schwab", "Vanguard"]
