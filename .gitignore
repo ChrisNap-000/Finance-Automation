@@ -22,3 +22,5 @@ secrets.toml
 markdown
 
 TEST.ipynb
+
+.vscode
