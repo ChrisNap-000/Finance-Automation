@@ -73,9 +73,10 @@ def _apply_pnl_flag(df):
     ] = False
 
     # Outgoing transfer to credit card should not count as spending
+    cc_secret = "CC Transfer" if st.session_state.get("demo_mode") else st.secrets["CC_SECRET"]
     df.loc[
         (df["Transaction Type"].str.upper() == "TRANSFER") &
-        (df["Vendor"].str.upper() == st.secrets["CC_SECRET"].upper()),
+        (df["Vendor"].str.upper() == cc_secret.upper()),
         "PnL_flag"
     ] = False
 

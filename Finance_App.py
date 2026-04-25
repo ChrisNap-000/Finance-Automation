@@ -152,6 +152,18 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ---------------------------
+# DEMO MODE BANNER
+# ---------------------------
+if st.session_state.get("demo_mode"):
+    demo_col1, demo_col2 = st.columns([5, 1])
+    with demo_col1:
+        st.info("Demo mode — viewing sample data. No real data is shown or saved.")
+    with demo_col2:
+        if st.button("Exit Demo", use_container_width=True):
+            st.session_state.clear()
+            st.rerun()
+
+# ---------------------------
 # CENTERED NAV BUTTONS
 # ---------------------------
 # Default to Dashboard on first load.

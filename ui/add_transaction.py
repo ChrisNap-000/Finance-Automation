@@ -67,6 +67,10 @@ def render_add_transaction(account_names: dict) -> None:
     """
     st.title("Add Transaction")
 
+    if st.session_state.get("demo_mode"):
+        st.info("You are viewing demo data. Log in with real credentials to add transactions.")
+        return
+
     step = st.session_state.get("add_txn_step", "form")
 
     if step == "form":

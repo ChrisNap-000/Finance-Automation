@@ -39,9 +39,74 @@
 #   Supabase dashboard under Authentication → Policies.
 # =============================================================================
 
+import os
+
 import pandas as pd
 import streamlit as st
 from supabase import create_client, Client
+
+_DEMO_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "Test_Data")
+
+
+def _load_demo_accounts() -> pd.DataFrame:
+    return pd.read_csv(os.path.join(_DEMO_DIR, "demo_dim_accounts.csv"))
+
+
+def _load_demo_transactions() -> pd.DataFrame:
+    df = pd.read_csv(os.path.join(_DEMO_DIR, "demo_fct_transactions.csv"))
+    accounts = _load_demo_accounts()
+    account_map = dict(zip(accounts["id"], accounts["account_name"]))
+    df["Account"] = df["account_id"].map(account_map)
+    df.drop(columns=["account_id", "user_id"], inplace=True)
+    df.rename(columns={
+        "transaction_date": "Date",
+        "transaction_type": "Transaction Type",
+        "vendor_name":      "Vendor",
+        "amount":           "Amount",
+        "category":         "Category",
+        "check_number":     "Check Number",
+        "notes":            "Notes",
+    }, inplace=True)
+    df["Date"]   = pd.to_datetime(df["Date"], errors="coerce")
+    df["Amount"] = pd.to_numeric(df["Amount"], errors="coerce").fillna(0)
+    return df[["Date", "Account", "Transaction Type", "Vendor", "Amount", "Category", "Check Number", "Notes"]]
+
+
+def _load_demo_account_balances() -> dict:
+    accounts = _load_demo_accounts()
+    account_map = dict(zip(accounts["id"], accounts["account_name"]))
+
+    df_sb = pd.read_csv(os.path.join(_DEMO_DIR, "demo_dim_starting_balances.csv"))
+    df_sb["account_name"]  = df_sb["account_id"].map(account_map)
+    df_sb["recorded_date"] = pd.to_datetime(df_sb["recorded_date"])
+    df_sb["balance"]       = pd.to_numeric(df_sb["balance"], errors="coerce").fillna(0)
+    latest_seeds = (
+        df_sb.sort_values("recorded_date")
+        .groupby("account_name")
+        .last()
+        .reset_index()[["account_name", "balance", "recorded_date"]]
+    )
+
+    df_txn = pd.read_csv(os.path.join(_DEMO_DIR, "demo_fct_transactions.csv"))
+    df_txn["account_name"]     = df_txn["account_id"].map(account_map)
+    df_txn["transaction_date"] = pd.to_datetime(df_txn["transaction_date"], errors="coerce")
+    df_txn["amount"]           = pd.to_numeric(df_txn["amount"], errors="coerce").fillna(0)
+
+    account_balances = {}
+    for _, seed in latest_seeds.iterrows():
+        account_name = seed["account_name"]
+        post_seed = df_txn[
+            (df_txn["account_name"] == account_name) &
+            (df_txn["transaction_date"] > seed["recorded_date"])
+        ]
+        account_balances[account_name] = seed["balance"] + post_seed["amount"].sum()
+
+    return account_balances
+
+
+def _load_demo_account_names() -> dict:
+    accounts = _load_demo_accounts()
+    return dict(zip(accounts["account_name"], accounts["id"]))
 
 
 def _get_authenticated_client() -> Client:
@@ -78,6 +143,9 @@ def load_transactions(access_token: str) -> pd.DataFrame:
     Debug tip: If Account shows as None for a row, the FK join failed —
     the account_id in fct_transactions does not exist in dim_accounts.
     """
+    if access_token == "demo":
+        return _load_demo_transactions()
+
     client = _get_authenticated_client()
 
     # Join dim_accounts to resolve account_id → account_name in one query
@@ -132,6 +200,9 @@ def load_account_balances(access_token: str) -> dict:
       - That transaction amounts use the correct sign (negative = debit)
       - That recorded_date on the seed is earlier than the transactions you expect
     """
+    if access_token == "demo":
+        return _load_demo_account_balances()
+
     client = _get_authenticated_client()
 
     # Load seed balances with account names via FK join
@@ -207,6 +278,9 @@ def load_account_names(access_token: str) -> dict:
       2. The Supabase client is not authenticated (access_token missing from session)
       3. The dim_accounts table is empty
     """
+    if access_token == "demo":
+        return _load_demo_account_names()
+
     client = _get_authenticated_client()
     res = client.table("dim_accounts").select("id, account_name").order("account_name").execute()
     if not res.data:

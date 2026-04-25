@@ -1,0 +1,294 @@
+transaction_date,account_id,transaction_type,vendor_name,amount,category,check_number,notes,user_id
+2025-01-01,5,Deposit,Schwab Contribution,500.00,,,Monthly contribution,demo
+2025-01-01,6,Deposit,Vanguard Contribution,300.00,,,Monthly contribution,demo
+2025-01-01,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-01-02,4,Expense,Gas Station,-52.40,Transportation,,,demo
+2025-01-05,4,Expense,AMAZON,-89.99,Miscellaneous,,,demo
+2025-01-08,4,Expense,Generic Restaurant,-65.20,Eating Out/Drinks,,,demo
+2025-01-10,4,Expense,Gas Station,-48.75,Transportation,,,demo
+2025-01-14,4,Expense,Generic Bar,-112.50,Eating Out/Drinks,,,demo
+2025-01-15,1,Income,LEVELUP,3215.40,,,Bi-weekly paycheck,demo
+2025-01-15,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-01-17,4,Expense,AMAZON,-34.95,Miscellaneous,,,demo
+2025-01-20,4,Expense,Gas Station,-55.30,Transportation,,,demo
+2025-01-24,4,Expense,Touchtunes,-28.50,Entertainment,,,demo
+2025-01-27,4,Expense,Generic Restaurant,-78.40,Eating Out/Drinks,,,demo
+2025-01-29,1,Income,LEVELUP,3180.75,,,Bi-weekly paycheck,demo
+2025-01-29,4,Expense,Beer Distributor,-157.16,Eating Out/Drinks,,,demo
+2025-01-31,1,Expense,LA FITNESS,-39.99,Health/Medical,,,demo
+2025-01-31,1,Transfer,CC Transfer,-724.18,,,Monthly CC payment,demo
+2025-01-31,2,Interest,INTEREST CREDIT,87.50,,,demo
+2025-01-31,3,Interest,INTEREST CREDIT,53.25,,,demo
+2025-01-31,4,CC Payment,CC Transfer,724.18,,,Monthly CC payment,demo
+2025-02-01,5,Deposit,Schwab Contribution,500.00,,,Monthly contribution,demo
+2025-02-01,6,Deposit,Vanguard Contribution,300.00,,,Monthly contribution,demo
+2025-02-01,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-02-03,4,Expense,Gas Station,-44.80,Transportation,,,demo
+2025-02-07,4,Expense,Generic Restaurant,-72.60,Eating Out/Drinks,,,demo
+2025-02-10,4,Expense,AMAZON,-124.95,Miscellaneous,,,demo
+2025-02-14,1,Income,LEVELUP,3250.80,,,Bi-weekly paycheck,demo
+2025-02-14,4,Expense,Gas Station,-51.20,Transportation,,,demo
+2025-02-14,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-02-18,4,Expense,Generic Bar,-95.75,Eating Out/Drinks,,,demo
+2025-02-21,4,Expense,Touchtunes,-45.30,Entertainment,,,demo
+2025-02-24,4,Expense,Gas Station,-48.90,Transportation,,,demo
+2025-02-27,4,Expense,Generic Restaurant,-88.50,Eating Out/Drinks,,,demo
+2025-02-28,1,Expense,LA FITNESS,-39.99,Health/Medical,,,demo
+2025-02-28,1,Income,LEVELUP,3190.25,,,Bi-weekly paycheck,demo
+2025-02-28,1,Transfer,CC Transfer,-571.00,,,Monthly CC payment,demo
+2025-02-28,2,Interest,INTEREST CREDIT,91.20,,,demo
+2025-02-28,3,Interest,INTEREST CREDIT,54.10,,,demo
+2025-02-28,4,CC Payment,CC Transfer,571.00,,,Monthly CC payment,demo
+2025-03-01,5,Deposit,Schwab Contribution,500.00,,,Monthly contribution,demo
+2025-03-01,6,Deposit,Vanguard Contribution,300.00,,,Monthly contribution,demo
+2025-03-01,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-03-03,4,Expense,Gas Station,-59.40,Transportation,,,demo
+2025-03-05,4,Expense,AMAZON,-67.99,Miscellaneous,,,demo
+2025-03-08,4,Expense,Generic Restaurant,-88.20,Eating Out/Drinks,,,demo
+2025-03-12,4,Expense,Gas Station,-52.80,Transportation,,,demo
+2025-03-14,1,Income,LEVELUP,3228.60,,,Bi-weekly paycheck,demo
+2025-03-14,4,Expense,Generic Bar,-125.50,Eating Out/Drinks,,,demo
+2025-03-14,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-03-18,4,Expense,Sports Event,-115.00,Entertainment,,,demo
+2025-03-20,4,Expense,Gas Station,-61.30,Transportation,,,demo
+2025-03-24,4,Expense,AMAZON,-198.50,Miscellaneous,,,demo
+2025-03-28,4,Expense,Generic Restaurant,-74.08,Eating Out/Drinks,,,demo
+2025-03-31,1,Expense,LA FITNESS,-39.99,Health/Medical,,,demo
+2025-03-31,1,Income,LEVELUP,3175.40,,,Bi-weekly paycheck,demo
+2025-03-31,1,Transfer,CC Transfer,-842.77,,,Monthly CC payment,demo
+2025-03-31,2,Interest,INTEREST CREDIT,89.80,,,demo
+2025-03-31,3,Interest,INTEREST CREDIT,54.65,,,demo
+2025-03-31,4,CC Payment,CC Transfer,842.77,,,Monthly CC payment,demo
+2025-04-01,5,Deposit,Schwab Contribution,500.00,,,Monthly contribution,demo
+2025-04-01,6,Deposit,Vanguard Contribution,300.00,,,Monthly contribution,demo
+2025-04-01,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-04-02,4,Expense,Gas Station,-48.30,Transportation,,,demo
+2025-04-07,4,Expense,Generic Restaurant,-81.70,Eating Out/Drinks,,,demo
+2025-04-10,4,Expense,AMAZON,-42.50,Miscellaneous,,,demo
+2025-04-14,4,Expense,Gas Station,-55.90,Transportation,,,demo
+2025-04-15,1,Income,LEVELUP,3310.20,,,Bi-weekly paycheck,demo
+2025-04-15,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-04-17,4,Expense,Generic Bar,-108.25,Eating Out/Drinks,,,demo
+2025-04-21,4,Expense,Touchtunes,-36.40,Entertainment,,,demo
+2025-04-25,4,Expense,Generic Restaurant,-95.80,Eating Out/Drinks,,,demo
+2025-04-29,4,Expense,Gas Station,-51.80,Transportation,,,demo
+2025-04-30,1,Expense,LA FITNESS,-39.99,Health/Medical,,,demo
+2025-04-30,1,Income,LEVELUP,3195.80,,,Bi-weekly paycheck,demo
+2025-04-30,1,Transfer,CC Transfer,-519.65,,,Monthly CC payment,demo
+2025-04-30,2,Interest,INTEREST CREDIT,93.40,,,demo
+2025-04-30,3,Interest,INTEREST CREDIT,55.20,,,demo
+2025-04-30,4,CC Payment,CC Transfer,519.65,,,Monthly CC payment,demo
+2025-05-01,5,Deposit,Schwab Contribution,500.00,,,Monthly contribution,demo
+2025-05-01,6,Deposit,Vanguard Contribution,300.00,,,Monthly contribution,demo
+2025-05-01,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-05-01,4,Expense,Gas Station,-53.20,Transportation,,,demo
+2025-05-05,4,Expense,AMAZON,-156.99,Miscellaneous,,,demo
+2025-05-09,4,Expense,Generic Restaurant,-67.40,Eating Out/Drinks,,,demo
+2025-05-13,4,Expense,Gas Station,-49.70,Transportation,,,demo
+2025-05-15,1,Income,LEVELUP,3240.75,,,Bi-weekly paycheck,demo
+2025-05-15,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-05-17,4,Expense,Generic Bar,-142.00,Eating Out/Drinks,,,demo
+2025-05-21,4,Expense,Golf,-87.50,Entertainment,,,demo
+2025-05-24,4,Expense,Gas Station,-58.30,Transportation,,,demo
+2025-05-28,4,Expense,Generic Restaurant,-119.23,Eating Out/Drinks,,,demo
+2025-05-30,1,Expense,LA FITNESS,-39.99,Health/Medical,,,demo
+2025-05-30,1,Income,LEVELUP,3185.90,,,Bi-weekly paycheck,demo
+2025-05-30,1,Transfer,CC Transfer,-733.32,,,Monthly CC payment,demo
+2025-05-30,4,CC Payment,CC Transfer,733.32,,,Monthly CC payment,demo
+2025-05-31,2,Interest,INTEREST CREDIT,95.60,,,demo
+2025-05-31,3,Interest,INTEREST CREDIT,55.80,,,demo
+2025-06-01,5,Deposit,Schwab Contribution,500.00,,,Monthly contribution,demo
+2025-06-01,6,Deposit,Vanguard Contribution,300.00,,,Monthly contribution,demo
+2025-06-01,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-06-02,4,Expense,Gas Station,-61.80,Transportation,,,demo
+2025-06-06,4,Expense,Generic Restaurant,-94.50,Eating Out/Drinks,,,demo
+2025-06-10,4,Expense,AMAZON,-72.99,Miscellaneous,,,demo
+2025-06-13,1,Income,LEVELUP,3268.40,,,Bi-weekly paycheck,demo
+2025-06-13,4,Expense,Generic Bar,-165.40,Eating Out/Drinks,,,demo
+2025-06-13,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-06-17,4,Expense,Gas Station,-57.20,Transportation,,,demo
+2025-06-20,4,Expense,Sports Event,-171.83,Entertainment,,,demo
+2025-06-24,4,Expense,Touchtunes,-62.84,Entertainment,,,demo
+2025-06-27,4,Expense,Gas Station,-48.90,Transportation,,,demo
+2025-06-30,1,Expense,LA FITNESS,-39.99,Health/Medical,,,demo
+2025-06-30,1,Income,LEVELUP,3201.60,,,Bi-weekly paycheck,demo
+2025-06-30,1,Transfer,CC Transfer,-856.10,,,Monthly CC payment,demo
+2025-06-30,2,Interest,INTEREST CREDIT,98.20,,,demo
+2025-06-30,3,Interest,INTEREST CREDIT,56.40,,,demo
+2025-06-30,4,CC Payment,CC Transfer,856.10,,,Monthly CC payment,demo
+2025-06-30,4,Expense,Generic Restaurant,-121.64,Eating Out/Drinks,,,demo
+2025-07-01,5,Deposit,Schwab Contribution,500.00,,,Monthly contribution,demo
+2025-07-01,6,Deposit,Vanguard Contribution,300.00,,,Monthly contribution,demo
+2025-07-01,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-07-02,4,Expense,Gas Station,-128.87,Transportation,,,demo
+2025-07-04,4,Expense,Gas Station,-123.93,Transportation,,,demo
+2025-07-10,4,Expense,AMAZON,-100.18,Miscellaneous,,,demo
+2025-07-14,4,Expense,Golf,-193.25,Entertainment,,,demo
+2025-07-14,4,Expense,Generic Bar,-99.52,Eating Out/Drinks,,,demo
+2025-07-15,1,Income,LEVELUP,3290.15,,,Bi-weekly paycheck,demo
+2025-07-15,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-07-21,4,Expense,Gas Station,-198.26,Transportation,,,demo
+2025-07-21,4,Expense,Touchtunes,-62.84,Entertainment,,,demo
+2025-07-25,4,Expense,Golf,-82.22,Entertainment,,,demo
+2025-07-29,4,Expense,Generic Restaurant,-187.55,Eating Out/Drinks,,,demo
+2025-07-31,1,Expense,LA FITNESS,-39.99,Health/Medical,,,demo
+2025-07-31,1,Income,LEVELUP,3220.80,,,Bi-weekly paycheck,demo
+2025-07-31,1,Transfer,CC Transfer,-1076.62,,,Monthly CC payment,demo
+2025-07-31,2,Interest,INTEREST CREDIT,97.30,,,demo
+2025-07-31,3,Interest,INTEREST CREDIT,57.10,,,demo
+2025-07-31,4,CC Payment,CC Transfer,1076.62,,,Monthly CC payment,demo
+2025-07-31,4,Expense,Micropayment,-89.78,Miscellaneous,,,demo
+2025-08-01,5,Deposit,Schwab Contribution,500.00,,,Monthly contribution,demo
+2025-08-01,6,Deposit,Vanguard Contribution,300.00,,,Monthly contribution,demo
+2025-08-01,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-08-04,4,Expense,Gas Station,-134.21,Transportation,,,demo
+2025-08-05,4,Expense,Micropayment,-191.42,Miscellaneous,,,demo
+2025-08-11,4,Expense,AMAZON,-74.54,Miscellaneous,,,demo
+2025-08-11,4,Expense,DUNKIN,-84.99,Eating Out/Drinks,,,demo
+2025-08-11,4,Expense,Generic Bar,-178.30,Eating Out/Drinks,,,demo
+2025-08-14,4,Expense,Generic Restaurant,-114.79,Eating Out/Drinks,,,demo
+2025-08-15,1,Income,LEVELUP,3255.60,,,Bi-weekly paycheck,demo
+2025-08-15,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-08-19,4,Expense,AMAZON,-197.50,Miscellaneous,,,demo
+2025-08-22,1,Transfer,CC Transfer,-1200.00,,,Monthly CC payment,demo
+2025-08-22,4,CC Payment,CC Transfer,1200.00,,,Monthly CC payment,demo
+2025-08-29,1,Income,LEVELUP,3205.40,,,Bi-weekly paycheck,demo
+2025-08-31,1,Expense,LA FITNESS,-39.99,Health/Medical,,,demo
+2025-08-31,2,Interest,INTEREST CREDIT,94.80,,,demo
+2025-08-31,3,Interest,INTEREST CREDIT,56.90,,,demo
+2025-09-01,5,Deposit,Schwab Contribution,500.00,,,Monthly contribution,demo
+2025-09-01,6,Deposit,Vanguard Contribution,300.00,,,Monthly contribution,demo
+2025-09-01,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-09-01,4,Expense,Gas Station,-178.90,Transportation,,,demo
+2025-09-01,4,Expense,Touchtunes,-103.89,Entertainment,,,demo
+2025-09-08,4,Expense,Beer Distributor,-124.76,Eating Out/Drinks,,,demo
+2025-09-08,4,Expense,Gas Station,-159.34,Transportation,,,demo
+2025-09-12,4,Expense,Gas Station,-86.84,Transportation,,,demo
+2025-09-15,1,Income,LEVELUP,3275.30,,,Bi-weekly paycheck,demo
+2025-09-15,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-09-19,4,Expense,Generic Restaurant,-159.31,Eating Out/Drinks,,,demo
+2025-09-22,4,Expense,Parking,-79.84,Transportation,,,demo
+2025-09-25,4,Expense,Gas Station,-147.28,Transportation,,,demo
+2025-09-29,4,Expense,Micropayment,-75.33,Miscellaneous,,,demo
+2025-09-30,1,Expense,LA FITNESS,-39.99,Health/Medical,,,demo
+2025-09-30,1,Income,LEVELUP,3210.45,,,Bi-weekly paycheck,demo
+2025-09-30,1,Transfer,CC Transfer,-1200.00,,,Monthly CC payment,demo
+2025-09-30,2,Interest,INTEREST CREDIT,92.60,,,demo
+2025-09-30,3,Interest,INTEREST CREDIT,57.80,,,demo
+2025-09-30,4,CC Payment,CC Transfer,1200.00,,,Monthly CC payment,demo
+2025-10-01,5,Deposit,Schwab Contribution,500.00,,,Monthly contribution,demo
+2025-10-01,6,Deposit,Vanguard Contribution,300.00,,,Monthly contribution,demo
+2025-10-01,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-10-06,4,Expense,Micropayment,-103.61,Miscellaneous,,,demo
+2025-10-06,4,Expense,Golf,-82.22,Entertainment,,,demo
+2025-10-06,4,Expense,Generic Bar,-168.89,Eating Out/Drinks,,,demo
+2025-10-10,4,Expense,Micropayment,-133.14,Miscellaneous,,,demo
+2025-10-13,4,Expense,Gas Station,-119.64,Transportation,,,demo
+2025-10-15,1,Income,LEVELUP,3300.60,,,Bi-weekly paycheck,demo
+2025-10-15,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-10-20,4,Expense,Generic Bar,-61.54,Eating Out/Drinks,,,demo
+2025-10-20,4,Expense,Generic Bar,-162.29,Eating Out/Drinks,,,demo
+2025-10-20,4,Expense,Uber,-120.26,Transportation,,,demo
+2025-10-28,4,Expense,Touchtunes,-137.60,Entertainment,,,demo
+2025-10-31,1,Expense,LA FITNESS,-39.99,Health/Medical,,,demo
+2025-10-31,1,Income,LEVELUP,3198.75,,,Bi-weekly paycheck,demo
+2025-10-31,1,Transfer,CC Transfer,-1100.00,,,Monthly CC payment,demo
+2025-10-31,2,Interest,INTEREST CREDIT,96.10,,,demo
+2025-10-31,3,Interest,INTEREST CREDIT,58.40,,,demo
+2025-10-31,4,CC Payment,CC Transfer,1100.00,,,Monthly CC payment,demo
+2025-11-01,5,Deposit,Schwab Contribution,500.00,,,Monthly contribution,demo
+2025-11-01,6,Deposit,Vanguard Contribution,300.00,,,Monthly contribution,demo
+2025-11-01,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-11-03,4,Expense,Gas Station,-68.67,Transportation,,,demo
+2025-11-06,4,Expense,Micropayment,-188.20,Miscellaneous,,,demo
+2025-11-06,4,Expense,AMAZON,-39.15,Miscellaneous,,,demo
+2025-11-10,4,Expense,Gas Station,-61.60,Transportation,,,demo
+2025-11-10,4,Expense,Generic Bar,-117.92,Eating Out/Drinks,,,demo
+2025-11-10,4,Expense,Beer Distributor,-198.04,Eating Out/Drinks,,,demo
+2025-11-14,4,Expense,Micropayment,-157.41,Miscellaneous,,,demo
+2025-11-15,1,Income,LEVELUP,3280.40,,,Bi-weekly paycheck,demo
+2025-11-15,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-11-17,1,Expense,LA FITNESS,-39.99,Health/Medical,,,demo
+2025-11-17,4,Expense,Sports Event,-131.67,Entertainment,,,demo
+2025-11-19,1,Income,LEVELUP,3215.60,,,Bi-weekly paycheck,demo
+2025-11-21,4,Expense,Micropayment,-120.79,Miscellaneous,,,demo
+2025-11-24,4,Expense,Gas Station,-130.70,Transportation,,,demo
+2025-11-30,1,Transfer,CC Transfer,-1200.00,,,Monthly CC payment,demo
+2025-11-30,2,Interest,INTEREST CREDIT,99.40,,,demo
+2025-11-30,3,Interest,INTEREST CREDIT,59.20,,,demo
+2025-11-30,4,CC Payment,CC Transfer,1200.00,,,Monthly CC payment,demo
+2025-12-01,5,Deposit,Schwab Contribution,500.00,,,Monthly contribution,demo
+2025-12-01,6,Deposit,Vanguard Contribution,300.00,,,Monthly contribution,demo
+2025-12-01,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-12-04,4,Expense,Gas Station,-12.75,Transportation,,,demo
+2025-12-08,4,Expense,Micropayment,-166.05,Miscellaneous,,,demo
+2025-12-08,4,Expense,AMAZON,-148.20,Miscellaneous,,,demo
+2025-12-09,4,Expense,Micropayment,-42.62,Miscellaneous,,,demo
+2025-12-15,1,Income,LEVELUP,3268.20,,,Bi-weekly paycheck,demo
+2025-12-15,4,Expense,Generic Bar,-170.93,Eating Out/Drinks,,,demo
+2025-12-15,4,Expense,Gas Station,-82.80,Transportation,,,demo
+2025-12-15,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2025-12-16,4,Expense,AMAZON,-59.92,Miscellaneous,,,demo
+2025-12-17,4,Expense,Generic Bar,-39.54,Eating Out/Drinks,,,demo
+2025-12-19,4,Expense,Gas Station,-119.93,Transportation,,,demo
+2025-12-22,1,Transfer,CC Transfer,-900.00,,,Monthly CC payment,demo
+2025-12-22,4,CC Payment,CC Transfer,900.00,,,Monthly CC payment,demo
+2025-12-29,4,Expense,Micropayment,-99.14,Miscellaneous,,,demo
+2025-12-29,4,Expense,AMAZON,-135.66,Miscellaneous,,,demo
+2025-12-30,1,Income,LEVELUP,3215.80,,,Bi-weekly paycheck,demo
+2025-12-31,1,Expense,LA FITNESS,-39.99,Health/Medical,,,demo
+2025-12-31,2,Interest,INTEREST CREDIT,102.50,,,demo
+2025-12-31,3,Interest,INTEREST CREDIT,60.10,,,demo
+2026-01-01,5,Deposit,Schwab Contribution,500.00,,,Monthly contribution,demo
+2026-01-01,6,Deposit,Vanguard Contribution,300.00,,,Monthly contribution,demo
+2026-01-01,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2026-01-02,1,Transfer,CC Transfer,-250.00,,,CC payment,demo
+2026-01-02,4,CC Payment,CC Transfer,250.00,,,CC payment,demo
+2026-01-02,4,Expense,Micropayment,-137.30,Miscellaneous,,,demo
+2026-01-02,4,Expense,Hotel,-109.24,Miscellaneous,,,demo
+2026-01-05,4,Expense,Generic Bar,-131.23,Eating Out/Drinks,,,demo
+2026-01-05,4,Expense,Gas Station,-32.13,Transportation,,,demo
+2026-01-07,4,Expense,Air Pump,-75.28,Transportation,,,demo
+2026-01-09,1,Income,LEVELUP,3310.50,,,Bi-weekly paycheck,demo
+2026-01-09,2,Withdrawal,WITHDRAWAL,-81.76,,,demo
+2026-01-09,3,Interest,INTEREST CREDIT,64.22,,,demo
+2026-01-15,1,Income,LEVELUP,3250.80,,,Bi-weekly paycheck,demo
+2026-01-15,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2026-01-31,1,Expense,LA FITNESS,-39.99,Health/Medical,,,demo
+2026-01-31,2,Interest,INTEREST CREDIT,95.30,,,demo
+2026-02-01,5,Deposit,Schwab Contribution,500.00,,,Monthly contribution,demo
+2026-02-01,6,Deposit,Vanguard Contribution,300.00,,,Monthly contribution,demo
+2026-02-01,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2026-02-05,4,Expense,AMAZON,-89.99,Miscellaneous,,,demo
+2026-02-08,4,Expense,Gas Station,-56.40,Transportation,,,demo
+2026-02-12,4,Expense,Generic Bar,-120.75,Eating Out/Drinks,,,demo
+2026-02-14,1,Income,LEVELUP,3290.40,,,Bi-weekly paycheck,demo
+2026-02-14,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2026-02-18,4,Expense,Generic Restaurant,-95.30,Eating Out/Drinks,,,demo
+2026-02-21,4,Expense,Touchtunes,-48.60,Entertainment,,,demo
+2026-02-24,4,Expense,Gas Station,-62.80,Transportation,,,demo
+2026-02-28,1,Expense,LA FITNESS,-39.99,Health/Medical,,,demo
+2026-02-28,1,Income,LEVELUP,3218.60,,,Bi-weekly paycheck,demo
+2026-02-28,1,Transfer,CC Transfer,-473.84,,,Monthly CC payment,demo
+2026-02-28,2,Interest,INTEREST CREDIT,93.20,,,demo
+2026-02-28,3,Interest,INTEREST CREDIT,61.40,,,demo
+2026-02-28,4,CC Payment,CC Transfer,473.84,,,Monthly CC payment,demo
+2026-03-01,5,Deposit,Schwab Contribution,500.00,,,Monthly contribution,demo
+2026-03-01,6,Deposit,Vanguard Contribution,300.00,,,Monthly contribution,demo
+2026-03-01,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2026-03-03,4,Expense,Gas Station,-71.20,Transportation,,,demo
+2026-03-07,4,Expense,AMAZON,-134.50,Miscellaneous,,,demo
+2026-03-10,4,Expense,Generic Bar,-98.40,Eating Out/Drinks,,,demo
+2026-03-14,1,Income,LEVELUP,3275.80,,,Bi-weekly paycheck,demo
+2026-03-14,4,Expense,Gas Station,-59.30,Transportation,,,demo
+2026-03-14,7,Deposit,Retirement Contribution,400.00,,,401k contribution,demo
+2026-03-19,4,Expense,Generic Restaurant,-112.60,Eating Out/Drinks,,,demo
+2026-03-25,4,Expense,Sports Event,-85.00,Entertainment,,,demo
+2026-03-28,4,Expense,Touchtunes,-54.20,Entertainment,,,demo
+2026-03-31,1,Expense,LA FITNESS,-39.99,Health/Medical,,,demo
+2026-03-31,1,Income,LEVELUP,3198.20,,,Bi-weekly paycheck,demo
+2026-03-31,1,Transfer,CC Transfer,-614.00,,,Monthly CC payment,demo
+2026-03-31,2,Interest,INTEREST CREDIT,96.80,,,demo
+2026-03-31,3,Interest,INTEREST CREDIT,62.10,,,demo
+2026-03-31,4,CC Payment,CC Transfer,614.00,,,Monthly CC payment,demo
+2026-03-31,4,Expense,Micropayment,-90.20,Miscellaneous,,,demo

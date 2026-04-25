@@ -39,6 +39,10 @@ def render_add_balance(account_names: dict) -> None:
     """
     st.title("Add Starting Balance")
 
+    if st.session_state.get("demo_mode"):
+        st.info("You are viewing demo data. Log in with real credentials to add balances.")
+        return
+
     step = st.session_state.get("add_bal_step", "form")
 
     if step == "form":

@@ -1,0 +1,8 @@
+id,account_name,account_type,user_id
+1,TD Checking,Checking,demo
+2,TD Savings,Savings,demo
+3,TD CD,CD,demo
+4,TD Cash,Credit Card,demo
+5,Schwab,Investment,demo
+6,Vanguard,Investment,demo
+7,Retirement,Investment,demo

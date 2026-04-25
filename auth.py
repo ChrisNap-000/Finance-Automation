@@ -167,6 +167,16 @@ def _render_login_page() -> None:
                 # Generic message intentional — don't reveal whether email exists
                 st.error("Invalid email or password.")
 
+        st.divider()
+        if st.button("View Demo (no login required)", use_container_width=True, type="secondary"):
+            st.session_state["authenticated"]  = True
+            st.session_state["demo_mode"]      = True
+            st.session_state["user_id"]        = "demo"
+            st.session_state["access_token"]   = "demo"
+            st.session_state["refresh_token"]  = ""
+            st.session_state["user_email"]     = "demo@example.com"
+            st.rerun()
+
 
 def _render_mfa_page() -> None:
     """
