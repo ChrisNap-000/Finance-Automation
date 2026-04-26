@@ -100,7 +100,7 @@ st.markdown("""
 
     /* Sidebar — clean up */
     section[data-testid="stSidebar"] {
-        background-color: #0D1117;
+        background-color: #161B22;
         border-right: 1px solid #21262D;
         overflow: visible !important;
     }
@@ -209,13 +209,7 @@ st.divider()
 # ---------------------------
 # PAGE ROUTING
 # ---------------------------
-# Each page calls st.stop() after rendering so the dashboard code below
-# does not execute when a non-dashboard page is active.
-
-if st.session_state["page"] == "Investments":
-    render_investments(access_token)
-    st.stop()
-
+# Form pages need no transaction data or sidebar — route them immediately.
 if st.session_state["page"] == "Add Transaction":
     render_add_transaction(account_names)
     st.stop()
@@ -225,10 +219,29 @@ if st.session_state["page"] == "Add Starting Balance":
     st.stop()
 
 # ---------------------------
+# LOAD TRANSACTIONS + SIDEBAR FILTERS
+# ---------------------------
+# Dashboard and Investments both show the sidebar with transaction-based filters.
+df_raw = load_transactions(access_token)
+
+if not df_raw.empty:
+    df = apply_transformations(df_raw)
+    st.sidebar.header("Filters")
+    year_select, month_select, txn_types = render_filters(df)
+else:
+    df = df_raw
+    year_select, month_select, txn_types = [], [], []
+
+# ---------------------------
+# INVESTMENTS PAGE
+# ---------------------------
+if st.session_state["page"] == "Investments":
+    render_investments(access_token, year_select, month_select)
+    st.stop()
+
+# ---------------------------
 # DASHBOARD — LOAD & TRANSFORM
 # ---------------------------
-# These are only loaded when the Dashboard page is active (not wasted on form pages).
-df_raw           = load_transactions(access_token)
 account_balances = load_account_balances(access_token)
 
 if df_raw.empty:
@@ -239,15 +252,6 @@ if df_raw.empty:
         unsafe_allow_html=True,
     )
     st.stop()
-
-# Apply derived columns: Year, Month, PnL_flag
-df = apply_transformations(df_raw)
-
-# ---------------------------
-# SIDEBAR FILTERS
-# ---------------------------
-st.sidebar.header("Filters")
-year_select, month_select, txn_types = render_filters(df)
 
 # Apply all three filters simultaneously
 filtered_df = df[
@@ -261,6 +265,6 @@ filtered_df = df[
 # ---------------------------
 render_kpis(filtered_df, account_balances)
 render_monthly_cashflow(filtered_df)
-pivoted_df = render_pnl_breakdown(filtered_df)
+pivoted_df = render_pnl_breakdown(filtered_df, account_names)
 render_transactions_table(filtered_df)
 render_pnl_download(pivoted_df)

@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(echo \"Exit: $?\")"
+      "Bash(echo \"Exit: $?\")",
+      "WebFetch(domain:github.com)"
     ]
   }
 }

@@ -1,3 +1,5 @@
+import calendar
+
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
@@ -95,7 +97,7 @@ def _render_line_chart(df: pd.DataFrame, change_type: str, show_pct: bool) -> No
     st.plotly_chart(fig, use_container_width=True)
 
 
-def render_investments(access_token: str) -> None:
+def render_investments(access_token: str, year_select=None, month_select=None) -> None:
     df_raw = load_investment_balances(access_token)
 
     if df_raw.empty:
@@ -108,6 +110,13 @@ def render_investments(access_token: str) -> None:
         return
 
     df = _compute_changes(df_raw)
+
+    # Apply year/month filters from the sidebar (compute changes on full history first)
+    if year_select:
+        df = df[df["recorded_date"].dt.year.isin(year_select)]
+    if month_select:
+        month_nums = [list(calendar.month_name).index(m) for m in month_select]
+        df = df[df["recorded_date"].dt.month.isin(month_nums)]
 
     # Toggle button
     if "inv_show_pct" not in st.session_state:

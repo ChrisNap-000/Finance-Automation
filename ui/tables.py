@@ -1,95 +1,115 @@
-# =============================================================================
-# ui/tables.py — Dashboard table components
-#
-# Three table components used on the Dashboard page:
-#
-#   render_pnl_breakdown()    — pivot table grouped by Account/Type/Vendor
-#                               with monthly columns and a Total column
-#   render_transactions_table() — raw transaction list, newest first
-#   render_pnl_download()     — full pivot table shown at the bottom for export
-# =============================================================================
-
+import pandas as pd
 import streamlit as st
+from streamlit_pivot import st_pivot_table, PivotStyle, RegionStyle
+
+from config import INVESTMENT_ACCOUNTS
 
 
-def render_pnl_breakdown(filtered_df):
+def render_pnl_breakdown(filtered_df, all_account_names: dict):
     """
-    Render an expandable PnL pivot table grouped by Account and Transaction Type.
+    Render the PnL breakdown as an interactive pivot table.
 
-    Only transactions with PnL_flag == True are included (CC payments and
-    internal transfers are excluded — see data/transforms.py).
+    Row hierarchy: Account → Transaction Type → Category → Vendor
+    Columns: one per MMM-YYYY month period present in the filtered data.
+    Values: sum of Amount.
 
-    Structure:
-      - One st.expander per account
-      - Inside each expander: one section per transaction type
-      - Each section shows a subtotal row by default, with a checkbox to
-        expand the per-vendor detail rows
-
-    Pivot columns: one column per calendar month (e.g. "Jan-2026") in
-    chronological order, plus a "Total" column on the right.
+    Only PnL_flag=True transactions are included.
 
     Args:
-        filtered_df: Filtered and transformed DataFrame from Finance_App.py.
+        filtered_df:       Filtered and transformed DataFrame from Finance_App.py.
+        all_account_names: Dict {account_name: id} from load_account_names().
 
     Returns:
-        pivoted_df: The full pivot table DataFrame, passed to render_pnl_download().
-
-    Debug tip: If a month column is missing, it means no PnL_flag=True transactions
-    exist for that month under the current filters. Adjust Year/Month filters.
+        vendor_piv: Vendor-level pivot DataFrame passed to render_pnl_download().
     """
-    st.subheader("PNL Breakdown by Account and Transaction Type")
+    st.subheader("PNL Breakdown")
 
     source = filtered_df[filtered_df["PnL_flag"] == True].copy()
-    source["Month-Year-Period"] = source["Date"].dt.to_period("M")
-    source["Month-Year"]        = source["Month-Year-Period"].dt.strftime("%b-%Y")
-    source = source.sort_values("Month-Year-Period")
+    source["Category"] = source["Category"].fillna("Uncategorized")
 
-    # Build chronological month order for column sorting
-    month_year_order = (
-        source.drop_duplicates("Month-Year-Period")
-        .sort_values("Month-Year-Period")["Month-Year"]
+    if source.empty:
+        st.info("No PnL data for the current filter selection.")
+        return pd.DataFrame()
+
+    source["_period"]    = source["Date"].dt.to_period("M")
+    source               = source.dropna(subset=["_period"])
+    source["Month-Year"] = source["_period"].dt.strftime("%b-%Y")
+
+    months = (
+        source.drop_duplicates("_period")
+        .sort_values("_period")["Month-Year"]
         .tolist()
     )
 
-    pivoted_df = source.pivot_table(
-        index=["Account", "Transaction Type", "Vendor"],
-        columns="Month-Year",
-        values="Amount",
-        aggfunc="sum",
-        margins=True,           # adds the "Total" row/column
-        margins_name="Total"
-    ).fillna(0)
+    pivot_data = source[
+        ["Account", "Transaction Type", "Category", "Vendor", "Month-Year", "Amount"]
+    ].copy()
 
-    # Reorder columns chronologically (pivot_table may not preserve order)
-    cols = [col for col in month_year_order if col in pivoted_df.columns]
-    if "Total" in pivoted_df.columns:
-        cols.append("Total")
-    pivoted_df = pivoted_df.reindex(columns=cols)
+    st_pivot_table(
+        pivot_data,
+        key="pnl_breakdown",
+        rows=["Account", "Transaction Type", "Category", "Vendor"],
+        columns=["Month-Year"],
+        values=["Amount"],
+        aggregation="sum",
+        show_subtotals=True,
+        row_layout="hierarchy",
+        show_totals=True,
+        sorters={"Month-Year": months},
+        number_format="$,.2f",
+        locked=True,
+        hidden_from_aggregators=["Account", "Transaction Type", "Category", "Vendor"],
+        style=PivotStyle(
+            background_color="#0D1117",
+            column_header=RegionStyle(
+                background_color="#21262D",
+                text_color="#C9D1D9",
+                font_weight="bold",
+            ),
+            # Subtotal region covers Account, Transaction Type, and Category rows
+            # (any row that is a parent in the hierarchy).
+            subtotal=RegionStyle(
+                background_color="#1C2128",
+                text_color="#C9D1D9",
+                font_weight="bold",
+            ),
+            # row_header covers the label cells for detail (Vendor) rows.
+            row_header=RegionStyle(
+                background_color="#161B22",
+                text_color="#8B949E",
+            ),
+            data_cell=RegionStyle(
+                background_color="#0D1117",
+                text_color="#C9D1D9",
+            ),
+            # Grand total row/column uses the app's green accent.
+            row_total=RegionStyle(
+                background_color="#0f2a1a",
+                text_color="#3fb950",
+                font_weight="bold",
+            ),
+            column_total=RegionStyle(
+                background_color="#0f2a1a",
+                text_color="#3fb950",
+                font_weight="bold",
+            ),
+        ),
+    )
 
-    # Render one expander per account
-    for account in pivoted_df.index.get_level_values(0).unique():
-        account_df = pivoted_df.xs(account, level=0, drop_level=False)
+    # Build vendor_piv for the download section
+    vendor_piv = (
+        source.pivot_table(
+            index=["Account", "Transaction Type", "Category", "Vendor"],
+            columns="Month-Year",
+            values="Amount",
+            aggfunc="sum",
+            fill_value=0,
+        )
+        .reindex(columns=months, fill_value=0)
+    )
+    vendor_piv["Total"] = vendor_piv[months].sum(axis=1)
 
-        with st.expander(f"Account: {account}", expanded=True):
-            for txn_type in account_df.index.get_level_values(1).unique():
-                txn_df = account_df.xs(txn_type, level=1, drop_level=False)
-
-                # Show the subtotal row (sum across all vendors for this type)
-                subtotal = txn_df.sum(numeric_only=True).to_frame().T
-                st.markdown(f"**Transaction Type: {txn_type} (Subtotal)**")
-                st.dataframe(subtotal.style.format("${:,.2f}"))
-
-                # Optional detail view (per-vendor breakdown)
-                show_details = st.checkbox(
-                    f"Show details for {txn_type}",
-                    key=f"{account}_{txn_type}_details"
-                )
-
-                if show_details:
-                    detail_df = txn_df.droplevel([0, 1])
-                    st.dataframe(detail_df.style.format("${:,.2f}"))
-
-    return pivoted_df
+    return vendor_piv
 
 
 def render_transactions_table(filtered_df):
@@ -101,9 +121,6 @@ def render_transactions_table(filtered_df):
 
     Date is formatted as MM-DD-YYYY for readability.
     Amount is formatted with a dollar sign and commas.
-
-    Debug tip: Use this table to verify that transactions were inserted
-    correctly and to spot unexpected PnL_flag values.
     """
     st.subheader("Transactions")
 
@@ -124,13 +141,13 @@ def render_transactions_table(filtered_df):
 
 def render_pnl_download(pivoted_df):
     """
-    Render the full PnL pivot table at the bottom of the dashboard for export.
-
-    This shows the same data as render_pnl_breakdown() but as a single flat
-    table, which makes it easy to copy or export to Excel.
+    Render the full vendor-level PnL pivot table for export.
 
     Args:
         pivoted_df: The DataFrame returned by render_pnl_breakdown().
     """
     st.subheader("PNL Breakdown Download")
+    if pivoted_df.empty:
+        st.info("No PnL data to display.")
+        return
     st.dataframe(pivoted_df.style.format("${:,.2f}"), use_container_width=True)
