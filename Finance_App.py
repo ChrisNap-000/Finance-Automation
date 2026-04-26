@@ -23,11 +23,12 @@ from ui.charts import render_monthly_cashflow
 from ui.tables import render_pnl_breakdown, render_transactions_table, render_pnl_download
 from ui.add_transaction import render_add_transaction
 from ui.add_balance import render_add_balance
+from ui.investments import render_investments
 
 # ---------------------------
 # PAGE CONFIG
 # ---------------------------
-st.set_page_config(page_title="Finance Dashboard", page_icon="💲", layout="wide")
+st.set_page_config(page_title="Finance Dashboard", page_icon="💲", layout="wide", initial_sidebar_state="expanded")
 
 # ---------------------------
 # GLOBAL STYLES
@@ -37,9 +38,10 @@ st.set_page_config(page_title="Finance Dashboard", page_icon="💲", layout="wid
 st.markdown("""
 <style>
     /* Hide Streamlit chrome */
-    #MainMenu      { visibility: hidden; }
-    footer         { visibility: hidden; }
-    header         { visibility: hidden; }
+    #MainMenu                        { visibility: hidden; }
+    footer                           { visibility: hidden; }
+    [data-testid="stToolbar"]        { visibility: hidden; }
+    header[data-testid="stHeader"]   { background: transparent; box-shadow: none; }
 
     /* Tighten top padding */
     .main .block-container {
@@ -100,10 +102,14 @@ st.markdown("""
     section[data-testid="stSidebar"] {
         background-color: #0D1117;
         border-right: 1px solid #21262D;
+        overflow: visible !important;
     }
     section[data-testid="stSidebar"] .block-container {
         padding-top: 1.5rem;
     }
+
+    /* Prevent sidebar from being collapsed */
+    [data-testid="stSidebarCollapseButton"] { display: none !important; }
 
     /* Metric cards */
     div[data-testid="metric-container"] {
@@ -157,7 +163,12 @@ st.markdown("""
 if st.session_state.get("demo_mode"):
     demo_col1, demo_col2 = st.columns([5, 1])
     with demo_col1:
-        st.info("Demo mode — viewing sample data. No real data is shown or saved.")
+        st.markdown(
+        '<div style="background-color:rgba(23,146,60,0.09);border-left:4px solid #17923c;'
+        'border-radius:4px;padding:0.75rem 1rem;color:#17923c;font-size:0.95rem;">'
+        "Demo mode — viewing sample data. No real data is shown or saved.<div>",
+        unsafe_allow_html=True,
+        )
     with demo_col2:
         if st.button("Exit Demo", use_container_width=True):
             st.session_state.clear()
@@ -170,20 +181,25 @@ if st.session_state.get("demo_mode"):
 if "page" not in st.session_state:
     st.session_state["page"] = "Dashboard"
 
-# Three equal nav buttons centered with padding columns on each side.
-_, col1, col2, col3, _ = st.columns([1.5, 1, 1, 1, 1.5])
+# Four equal nav buttons centered with padding columns on each side.
+_, col1, col2, col3, col4, _ = st.columns([1, 1, 1, 1, 1, 1])
 
 if col1.button("Dashboard", use_container_width=True,
                type="primary" if st.session_state["page"] == "Dashboard" else "secondary"):
     st.session_state["page"] = "Dashboard"
     st.rerun()
 
-if col2.button("Add Transaction", use_container_width=True,
+if col2.button("Investments", use_container_width=True,
+               type="primary" if st.session_state["page"] == "Investments" else "secondary"):
+    st.session_state["page"] = "Investments"
+    st.rerun()
+
+if col3.button("Add Transaction", use_container_width=True,
                type="primary" if st.session_state["page"] == "Add Transaction" else "secondary"):
     st.session_state["page"] = "Add Transaction"
     st.rerun()
 
-if col3.button("Add Starting Balance", use_container_width=True,
+if col4.button("Add Starting Balance", use_container_width=True,
                type="primary" if st.session_state["page"] == "Add Starting Balance" else "secondary"):
     st.session_state["page"] = "Add Starting Balance"
     st.rerun()
@@ -195,6 +211,10 @@ st.divider()
 # ---------------------------
 # Each page calls st.stop() after rendering so the dashboard code below
 # does not execute when a non-dashboard page is active.
+
+if st.session_state["page"] == "Investments":
+    render_investments(access_token)
+    st.stop()
 
 if st.session_state["page"] == "Add Transaction":
     render_add_transaction(account_names)

@@ -3,7 +3,7 @@
 #
 # Currently contains one chart: Monthly Net Cash Flow bar chart.
 # Each bar represents one calendar month and shows net cash flow
-# (income minus spending). Paycheck count is overlaid as bar text.
+# (income minus spending). Net cash flow is shown as a data label above each bar.
 # =============================================================================
 
 import pandas as pd
@@ -45,13 +45,13 @@ def render_monthly_cashflow(filtered_df):
     df["Month"] = df["Date"].dt.to_period("M").dt.to_timestamp()
 
     # Count paycheck transactions per month (2 transactions per paycheck)
-    paycheck_counts = (
-        df.loc[df["Vendor"].str.contains("LEVELUP", case=False, na=False)]
-        .groupby("Month")
-        .size()
-        .reset_index(name="Paycheck Count")
-    )
-    paycheck_counts["Paycheck Count"] = paycheck_counts["Paycheck Count"] / 2
+    # paycheck_counts = (
+    #     df.loc[df["Vendor"].str.contains("LEVELUP", case=False, na=False)]
+    #     .groupby("Month")
+    #     .size()
+    #     .reset_index(name="Paycheck Count")
+    # )
+    # paycheck_counts["Paycheck Count"] = paycheck_counts["Paycheck Count"] / 2
 
     def monthly_net(group):
         """Sum income minus spending for a single month group."""
@@ -66,7 +66,7 @@ def render_monthly_cashflow(filtered_df):
     )
 
     monthly["MonthStr"] = monthly["Month"].dt.strftime("%b %Y")
-    monthly = monthly.merge(paycheck_counts, on="Month", how="left")
+    # monthly = monthly.merge(paycheck_counts, on="Month", how="left")
     monthly = monthly.sort_values("Month")
 
     fig = go.Figure(
@@ -74,12 +74,15 @@ def render_monthly_cashflow(filtered_df):
             go.Bar(
                 x=monthly["MonthStr"].tolist(),
                 y=monthly["Net Cash Flow"].tolist(),
-                text=monthly["Paycheck Count"].astype(str).tolist(),
+                marker_color = "#17923C",
+                text=monthly["Net Cash Flow"].apply(lambda v: f"${v:,.2f}").tolist(),
                 textposition="outside",
+                #text=monthly["Paycheck Count"].astype(str).tolist(),
+                #textposition="outside",
                 hovertemplate=(
                     "<b>%{x}</b><br>"
                     "Net Cash Flow: $%{y:,.2f}<br>"
-                    "Paychecks: %{text}"
+                    #"Paychecks: %{text}"
                     "<extra></extra>"
                 ),
             )

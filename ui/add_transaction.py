@@ -68,7 +68,12 @@ def render_add_transaction(account_names: dict) -> None:
     st.title("Add Transaction")
 
     if st.session_state.get("demo_mode"):
-        st.info("You are viewing demo data. Log in with real credentials to add transactions.")
+        st.markdown(
+        '<div style="background-color:rgba(23,146,60,0.09);border-left:4px solid #17923c;'
+        'border-radius:4px;padding:0.75rem 1rem;color:#17923c;font-size:0.95rem;">'
+        "You are viewing demo data. Log in with real credentials to add balances.<div>",
+        unsafe_allow_html=True,
+        )
         return
 
     step = st.session_state.get("add_txn_step", "form")

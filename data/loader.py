@@ -288,6 +288,46 @@ def load_account_names(access_token: str) -> dict:
     return {row["account_name"]: row["id"] for row in res.data}
 
 
+_INVESTMENT_IDS = [5, 6, 7]
+
+
+@st.cache_data(ttl=300, show_spinner="Loading investment data...")
+def load_investment_balances(access_token: str) -> pd.DataFrame:
+    """
+    Load all balance snapshots from dim_starting_balances for investment accounts
+    (Schwab ID=5, Vanguard ID=6, Retirement ID=7).
+
+    Returns all rows (not just the latest) so the investments page can compute
+    MoM and YoY changes from the full balance history.
+
+    Returns a DataFrame with columns: account_id, account_name, balance, recorded_date
+    """
+    if access_token == "demo":
+        accounts = _load_demo_accounts()
+        account_map = dict(zip(accounts["id"], accounts["account_name"]))
+        df = pd.read_csv(os.path.join(_DEMO_DIR, "demo_dim_starting_balances.csv"))
+        df = df[df["account_id"].isin(_INVESTMENT_IDS)].copy()
+        df["account_name"]  = df["account_id"].map(account_map)
+        df["recorded_date"] = pd.to_datetime(df["recorded_date"])
+        df["balance"]       = pd.to_numeric(df["balance"], errors="coerce").fillna(0)
+        return df[["account_id", "account_name", "balance", "recorded_date"]]
+
+    client = _get_authenticated_client()
+    res = client.table("dim_starting_balances").select(
+        "account_id, balance, recorded_date, dim_accounts!inner(account_name)"
+    ).in_("account_id", _INVESTMENT_IDS).execute()
+
+    if not res.data:
+        return pd.DataFrame(columns=["account_id", "account_name", "balance", "recorded_date"])
+
+    df = pd.DataFrame(res.data)
+    df["account_name"]  = df["dim_accounts"].apply(lambda x: x["account_name"])
+    df.drop(columns=["dim_accounts"], inplace=True)
+    df["recorded_date"] = pd.to_datetime(df["recorded_date"])
+    df["balance"]       = pd.to_numeric(df["balance"], errors="coerce").fillna(0)
+    return df[["account_id", "account_name", "balance", "recorded_date"]]
+
+
 def insert_transaction(data: dict) -> None:
     """
     Insert a single row into fct_transactions.
