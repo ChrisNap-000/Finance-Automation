@@ -99,7 +99,12 @@ def render_investments(access_token: str) -> None:
     df_raw = load_investment_balances(access_token)
 
     if df_raw.empty:
-        st.info("No investment balance history found. Add balance snapshots in dim_starting_balances.")
+        st.markdown(
+        '<div style="background-color:rgba(23,146,60,0.09);border-left:4px solid #17923c;'
+        'border-radius:4px;padding:0.75rem 1rem;color:#17923c;font-size:0.95rem;">'
+        "No investment balance history found. Add balance snapshots in dim_starting_balances.<div>",
+        unsafe_allow_html=True,
+        )
         return
 
     df = _compute_changes(df_raw)
