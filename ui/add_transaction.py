@@ -88,8 +88,8 @@ def _render_form(account_names: dict) -> None:
     """
     Render the transaction input form (Step 1).
 
-    On submit, validates that Vendor Name is filled, then stores the
-    transaction dict in session state and advances to the confirm step.
+    On submit, stores the transaction dict in session state and advances
+    to the confirm step.
 
     Layout: two columns
       Left  — Date, Account, Transaction Type, Vendor
@@ -113,7 +113,7 @@ def _render_form(account_names: dict) -> None:
             )
             account  = st.selectbox("Account", options=ordered_accounts)
             txn_type = st.selectbox("Transaction Type", options=TRANSACTION_TYPES)
-            vendor   = st.text_input("Vendor Name")
+            vendor   = st.text_input("Vendor Name (optional)")
 
         with col2:
             amount          = st.number_input("Amount", step=0.01, format="%.2f",
@@ -126,10 +126,6 @@ def _render_form(account_names: dict) -> None:
         submitted = st.form_submit_button("Review Transaction", use_container_width=True, type="primary")
 
     if submitted:
-        if not vendor:
-            st.error("Vendor Name is required.")
-            return
-
         # Resolve the category value:
         #   - "Other" selected → use the free-text field (or None if blank)
         #   - predefined option selected → use it directly

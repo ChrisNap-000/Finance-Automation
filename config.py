@@ -7,10 +7,10 @@
 
 # All accounts included in the "Total Balance" KPI.
 # Must match account_name values in dim_accounts exactly (case-sensitive).
-BALANCE_ACCOUNTS = ["TD Checking", "TD Savings", "TD CD", "TD Cash", "Schwab", "Vanguard", "Retirement"]
+BALANCE_ACCOUNTS = ["TD Checking", "TD Savings", "TD CD", "Schwab", "Vanguard", "Retirement"]
 
 # Bank/cash accounts shown in their own balance row on the dashboard.
-BANK_ACCOUNTS = ["TD Checking", "TD Savings", "TD CD", "TD Cash"]
+BANK_ACCOUNTS = ["TD Checking", "TD Savings", "TD CD"]
 
 # Investment accounts shown separately — excluded from PnL calculations.
 INVESTMENT_ACCOUNTS = ["Schwab", "Vanguard", "Retirement"]

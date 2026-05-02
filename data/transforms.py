@@ -9,8 +9,6 @@
 
 import calendar
 
-import streamlit as st
-
 from config import INVESTMENT_ACCOUNTS
 
 
@@ -53,15 +51,8 @@ def _apply_pnl_flag(df):
     Rules (PnL_flag = False means excluded from PnL):
       1. Credit card payments received into the credit card account are not
          income — they are just the account being paid off.
-      2. Transfers sent to the credit card vendor are not spending — they are
-         internal balance moves, not actual expenses.
-
-    The credit card vendor name is stored in st.secrets["CC_SECRET"] to keep
-    it out of source control.
-
-    Debug tip: If a transaction is incorrectly appearing in (or excluded from)
-    PnL, check the Transaction Type and Vendor values in the database, and
-    verify CC_SECRET in .streamlit/secrets.toml matches exactly.
+      2. Transactions with Transaction Type "CC Payment" are internal balance
+         moves, not actual expenses.
     """
     # Start with all transactions included in PnL
     df["PnL_flag"] = True
@@ -72,11 +63,9 @@ def _apply_pnl_flag(df):
         "PnL_flag"
     ] = False
 
-    # Outgoing transfer to credit card should not count as spending
-    cc_secret = "CC Transfer" if st.session_state.get("demo_mode") else st.secrets["CC_SECRET"]
+    # CC Payment transactions are internal transfers — not actual spending
     df.loc[
-        (df["Transaction Type"].str.upper() == "TRANSFER") &
-        (df["Vendor"].str.upper() == cc_secret.upper()),
+        df["Transaction Type"].str.upper() == "CC PAYMENT",
         "PnL_flag"
     ] = False
 

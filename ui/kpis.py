@@ -58,7 +58,7 @@ def render_kpis(filtered_df, account_balances: dict):
     for col, name in zip(bank_cols, BANK_ACCOUNTS):
         col.metric(f"{name}", f"${account_balances.get(name, 0):,.2f}")
 
-    # Row 4: Investment account balances
-    inv_cols = st.columns(len(INVESTMENT_ACCOUNTS))
-    for col, name in zip(inv_cols, INVESTMENT_ACCOUNTS):
-        col.metric(f"{name}", f"${account_balances.get(name, 0):,.2f}")
+    # # Row 4: Investment account balances
+    # inv_cols = st.columns(len(INVESTMENT_ACCOUNTS))
+    # for col, name in zip(inv_cols, INVESTMENT_ACCOUNTS):
+    #     col.metric(f"{name}", f"${account_balances.get(name, 0):,.2f}")
